@@ -17,7 +17,6 @@ public class MailService {
 
     private final JavaMailSender javaMailSender;
     private static final String senderEmail= "wlk256032@gmail.com";
-    private static int number;
     private final RedisTemplate<String, String> redisTemplate;
 
     //redis에 메일과 number를 넣는 코드
@@ -39,11 +38,11 @@ public class MailService {
     }
 
     // 랜덤으로 숫자 생성
-    public static void createNumber() {
-        number = (int)(Math.random() * (90000)) + 100000; //(int) Math.random() * (최댓값-최소값+1) + 최소값
+    public static int createNumber() {
+        return number = (int)(Math.random() * (90000)) + 100000; //(int) Math.random() * (최댓값-최소값+1) + 최소값
     }
 
-    public MimeMessage CreateMail(String mail) {
+    public MimeMessage CreateMail(String mail, int number) {
         createNumber();
         MimeMessage message = javaMailSender.createMimeMessage();
 
@@ -65,7 +64,8 @@ public class MailService {
     }
 
     public int sendMail(String mail) {
-        MimeMessage message = CreateMail(mail);
+        int number = createNumber();
+        MimeMessage message = CreateMail(mail, number);
         javaMailSender.send(message);
 
         return number;
